@@ -383,24 +383,29 @@ export default function InteractiveMap({
 
     // Handle dragging
     if (isDraggingRef.current) {
+      setHoveredArticleId(null);
+      setHoveredMarkerPos(null);
+      
       const deltaX = e.clientX - dragStartRef.current.x;
       const deltaY = e.clientY - dragStartRef.current.y;
       dragStartRef.current = { x: e.clientX, y: e.clientY };
 
       // Scale delta by canvas/CSS ratio so drag feels 1:1
       const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
 
       setPanX((prev) => {
         const next = prev + deltaX * scaleX;
-        panRef.current.x = next;
-        return next;
+        panRef.current.x = isFinite(next) ? next : panRef.current.x;
+        return isFinite(next) ? next : prev;
       });
       setPanY((prev) => {
         const next = prev + deltaY * scaleY;
-        panRef.current.y = next;
-        return next;
+        panRef.current.y = isFinite(next) ? next : panRef.current.y;
+        return isFinite(next) ? next : prev;
       });
       return;
     }
@@ -637,6 +642,9 @@ export default function InteractiveMap({
         // Remove duplicates by ID
         clusterArticles = clusterArticles.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
 
+        // Scale canvas position to CSS position for the tooltip div
+        const cssPos = canvasToCss(hoveredMarkerPos.x, hoveredMarkerPos.y);
+
         return (
           <div
             className="marker-tooltip"
@@ -651,9 +659,9 @@ export default function InteractiveMap({
               setHoveredMarkerPos(null);
             }}
             style={{
-              left: `${hoveredMarkerPos.x}px`,
-              top: `${hoveredMarkerPos.y - 70}px`,
-              transform: 'translateX(-50%)',
+              left: `${cssPos.x}px`,
+              top: `${cssPos.y - 12}px`,
+              transform: 'translateX(-50%) translateY(-100%)',
             }}
           >
             <div className="tooltip-header">
