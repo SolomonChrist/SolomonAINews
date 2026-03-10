@@ -100,21 +100,35 @@ export default function VideoPanel() {
               return (
                 <div key={video.id} className="video-grid-item">
                   {youtubeId && (!isNoEmbed || isPlaying) ? (
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&modestbranding=1&playsinline=1&rel=0`}
-                      title={video.title}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      style={{ border: 'none', borderRadius: '8px', width: '100%', height: '100%' }}
-                    ></iframe>
+                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&modestbranding=1&playsinline=1&rel=0`}
+                        title={video.title}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{ border: 'none', borderRadius: '8px', width: '100%', height: '100%' }}
+                      ></iframe>
+                      <a 
+                        href={`https://www.youtube.com/watch?v=${youtubeId}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{
+                          position: 'absolute', bottom: '10px', right: '10px',
+                          backgroundColor: 'rgba(0,0,0,0.7)', color: 'white', padding: '4px 8px',
+                          borderRadius: '4px', fontSize: '11px', textDecoration: 'none', zIndex: 10
+                        }}
+                      >
+                        🔗 Watch on YouTube
+                      </a>
+                    </div>
                   ) : (
                     <div
                       className="video-card fallback"
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); playVideo(video.id); }}
-                      style={{ height: '100%', flexDirection: 'column', cursor: 'pointer' }}
+                      style={{ height: '100%', flexDirection: 'column', cursor: 'pointer', position: 'relative' }}
                     >
                       <div style={{ position: 'relative', width: '100%', height: '120px' }}>
                         {video.thumbnail_url ? (
@@ -161,6 +175,19 @@ export default function VideoPanel() {
                           <span className="channel">📺 {video.channel}</span>
                         </div>
                       </div>
+                      <a 
+                        href={`https://www.youtube.com/watch?v=${youtubeId}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          position: 'absolute', bottom: '10px', right: '10px',
+                          backgroundColor: 'rgba(0,0,0,0.7)', color: 'white', padding: '4px 8px',
+                          borderRadius: '4px', fontSize: '11px', textDecoration: 'none', zIndex: 10
+                        }}
+                      >
+                        🔗 Open Link
+                      </a>
                     </div>
                   )}
                   <div className="video-label">{video.channel}</div>

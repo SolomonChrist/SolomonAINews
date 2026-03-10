@@ -158,7 +158,7 @@
       "id": "nbc-news",
       "name": "NBC News Now",
       "type": "video",
-      "url": "https://www.youtube.com/watch?v=F3aJ25P9p74",
+      "url": "https://www.youtube.com/@NBCNews/live",
       "category": "news",
       "enabled": true,
       "pollInterval": 1800,
