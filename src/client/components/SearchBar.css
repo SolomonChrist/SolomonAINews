@@ -1,0 +1,78 @@
+.search-bar {
+  padding: 20px;
+  background-color: var(--color-bg-light);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.search-bar form {
+  display: flex;
+  gap: 10px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-bg-dark);
+  color: var(--color-text);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.search-btn {
+  padding: 10px 20px;
+  border: 1px solid var(--color-primary);
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.search-btn:hover {
+  background-color: #0052a3;
+  transform: scale(1.02);
+}
+
+.search-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.filter-chip {
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-secondary);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.filter-chip.active {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}

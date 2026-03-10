@@ -1,0 +1,200 @@
+{
+  "sources": [
+    {
+      "id": "arxiv-ml",
+      "name": "ArXiv Machine Learning",
+      "type": "rss",
+      "url": "http://arxiv.org/rss/cs.LG/recent",
+      "enabled": true,
+      "category": "research",
+      "pollInterval": 3600,
+      "lastPolled": null
+    },
+    {
+      "id": "github-trending",
+      "name": "GitHub Trending AI",
+      "type": "github",
+      "url": "https://github.com/trending",
+      "enabled": true,
+      "category": "opensource",
+      "pollInterval": 1800,
+      "lastPolled": null,
+      "params": {
+        "language": "python",
+        "since": "daily"
+      }
+    },
+    {
+      "id": "techcrunch",
+      "name": "TechCrunch (RSS)",
+      "type": "rss",
+      "url": "https://techcrunch.com/feed/",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "arstechnica",
+      "name": "Ars Technica (RSS)",
+      "type": "rss",
+      "url": "http://feeds.arstechnica.com/arstechnica/index",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "thenextweb",
+      "name": "The Next Web (RSS)",
+      "type": "rss",
+      "url": "https://thenextweb.com/feed/",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "wired",
+      "name": "Wired AI (RSS)",
+      "type": "rss",
+      "url": "https://www.wired.com/feed/rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 3600,
+      "lastPolled": null
+    },
+    {
+      "id": "theverge",
+      "name": "The Verge (RSS)",
+      "type": "rss",
+      "url": "https://www.theverge.com/rss/index.xml",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "medium-ai",
+      "name": "Medium AI (RSS)",
+      "type": "rss",
+      "url": "https://medium.com/feed/tag/artificial-intelligence",
+      "enabled": true,
+      "category": "articles",
+      "pollInterval": 3600,
+      "lastPolled": null
+    },
+    {
+      "id": "reddit-machinelearning",
+      "name": "Reddit r/MachineLearning",
+      "type": "rss",
+      "url": "https://www.reddit.com/r/MachineLearning/.rss",
+      "enabled": true,
+      "category": "community",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "reddit-artificialintelligence",
+      "name": "Reddit r/ArtificialIntelligence",
+      "type": "rss",
+      "url": "https://www.reddit.com/r/artificial/.rss",
+      "enabled": true,
+      "category": "community",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "openai-blog",
+      "name": "OpenAI Blog",
+      "type": "rss",
+      "url": "https://openai.com/feed.xml",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 3600,
+      "lastPolled": null
+    },
+    {
+      "id": "deepmind-blog",
+      "name": "DeepMind Blog",
+      "type": "rss",
+      "url": "https://www.deepmind.com/blog.xml",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 3600,
+      "lastPolled": null
+    },
+    {
+      "id": "anthropic-blog",
+      "name": "Anthropic Research",
+      "type": "rss",
+      "url": "https://www.anthropic.com/feed.xml",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 3600,
+      "lastPolled": null
+    },
+    {
+      "id": "huggingface-blog",
+      "name": "Hugging Face Blog",
+      "type": "rss",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 3600,
+      "lastPolled": null
+    },
+    {
+      "id": "producthunt",
+      "name": "Product Hunt",
+      "type": "rss",
+      "url": "https://www.producthunt.com/feed.rss",
+      "enabled": true,
+      "category": "launches",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "reuters-live",
+      "name": "Reuters News",
+      "type": "video",
+      "url": "https://www.youtube.com/@Reuters/live",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800
+    },
+    {
+      "id": "al-jazeera",
+      "name": "Al Jazeera English",
+      "type": "video",
+      "url": "https://www.youtube.com/@aljazeeraenglish/live",
+      "category": "news",
+      "enabled": true,
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "nbc-news",
+      "name": "NBC News Now",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=F3aJ25P9p74",
+      "category": "news",
+      "enabled": true,
+      "pollInterval": 1800,
+      "lastPolled": null
+    }
+  ],
+  "settings": {
+    "refreshInterval": 300,
+    "maxArticlesPerSource": 50,
+    "mapZoom": 3,
+    "centerLat": 20,
+    "centerLng": 0,
+    "modules": [
+      "map",
+      "feed",
+      "videos",
+      "stats"
+    ]
+  }
+}
