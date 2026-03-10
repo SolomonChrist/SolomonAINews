@@ -660,7 +660,7 @@ export default function InteractiveMap({
             }}
             style={{
               left: `${cssPos.x}px`,
-              top: `${cssPos.y - 12}px`,
+              top: `${cssPos.y - 8}px`,
               transform: 'translateX(-50%) translateY(-100%)',
             }}
           >
