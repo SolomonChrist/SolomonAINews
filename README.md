@@ -6,7 +6,7 @@
 [![Status](https://img.shields.io/badge/status-in%20development-yellow)]()
 [![Node](https://img.shields.io/badge/node-18+-green)]()
 
-![AI News Dashboard Screenshot](screenshot.png)
+![AI News Dashboard Screenshot](screenshot.jpg)
 
 ## 🎯 Overview
 
