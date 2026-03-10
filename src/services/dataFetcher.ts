@@ -101,7 +101,7 @@ export class DataFetcher {
     try {
       const feed = await parser.parseURL(source.url);
       return (feed.items || []).slice(0, 10).map((item) => ({
-        id: `rss-${source.id}-${item.link?.slice(-20) || Math.random().toString(36).slice(2, 9)}`,
+        id: `rss-${source.id}-${Buffer.from(item.link || item.title || Math.random().toString()).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substring(0, 20)}`,
         title: item.title || 'Untitled',
         description: item.contentSnippet || item.title || '',
         url: item.link || '',

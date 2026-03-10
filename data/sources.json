@@ -155,30 +155,21 @@
       "lastPolled": null
     },
     {
-      "id": "reuters-live",
-      "name": "Reuters News",
+      "id": "nbc-news",
+      "name": "NBC News Now",
       "type": "video",
-      "url": "https://www.youtube.com/@Reuters/live",
-      "enabled": true,
-      "category": "news",
-      "pollInterval": 1800
-    },
-    {
-      "id": "al-jazeera",
-      "name": "Al Jazeera English",
-      "type": "video",
-      "url": "https://www.youtube.com/@aljazeeraenglish/live",
+      "url": "https://www.youtube.com/watch?v=F3aJ25P9p74",
       "category": "news",
       "enabled": true,
       "pollInterval": 1800,
       "lastPolled": null
     },
     {
-      "id": "nbc-news",
-      "name": "NBC News Now",
+      "id": "ai-news-taiwan",
+      "name": "AI News Taiwan",
       "type": "video",
-      "url": "https://www.youtube.com/watch?v=F3aJ25P9p74",
-      "category": "news",
+      "url": "https://www.youtube.com/live/HSImh9Pz_44?si=bCpd-sMsrzpGlcM3",
+      "category": "tech",
       "enabled": true,
       "pollInterval": 1800,
       "lastPolled": null
