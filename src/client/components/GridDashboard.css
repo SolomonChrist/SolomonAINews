@@ -397,7 +397,7 @@
 /* Article detail modal */
 .article-detail-modal {
   position: fixed;
-  bottom: 67px;
+  bottom: 70px;
   right: 20px;
   width: 380px;
   max-height: 80vh;
