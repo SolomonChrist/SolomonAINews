@@ -29,6 +29,7 @@ export default function SourceManager({ onClose, onSourcesChanged }: SourceManag
   const [discoveryResults, setDiscoveryResults] = useState<any[]>([]);
   const [loadingDiscovery, setLoadingDiscovery] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingSourceId, setEditingSourceId] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -60,25 +61,43 @@ export default function SourceManager({ onClose, onSourcesChanged }: SourceManag
     }
 
     try {
-      const response = await fetch('/api/sources', {
-        method: 'POST',
+      const url = editingSourceId ? `/api/sources/${editingSourceId}` : '/api/sources';
+      const method = editingSourceId ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to add source');
+        throw new Error(data.error || `Failed to ${editingSourceId ? 'update' : 'add'} source`);
       }
 
-      setSuccess(`Source "${formData.name}" added successfully!`);
+      setSuccess(`Source "${formData.name}" ${editingSourceId ? 'updated' : 'added'} successfully!`);
       setFormData({ name: '', type: 'rss', url: '', category: 'tech' });
       setShowAddForm(false);
+      setEditingSourceId(null);
       await loadSources();
       onSourcesChanged?.();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add source');
+      setError(err instanceof Error ? err.message : `Failed to ${editingSourceId ? 'update' : 'add'} source`);
     }
+  };
+
+  const startEditing = (source: NewsSource) => {
+    setFormData({
+      name: source.name,
+      type: source.type,
+      url: source.url,
+      category: source.category,
+    });
+    setEditingSourceId(source.id);
+    setShowAddForm(true);
+    setError('');
+    setSuccess('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleToggleSource = async (sourceId: string) => {
@@ -130,7 +149,15 @@ export default function SourceManager({ onClose, onSourcesChanged }: SourceManag
     <div className="source-manager">
       <div className="source-manager-header">
         <h3>📰 News Sources</h3>
-        <button className="btn-add-source" onClick={() => setShowAddForm(!showAddForm)}>
+        <button className="btn-add-source" onClick={() => {
+          if (showAddForm) {
+            setShowAddForm(false);
+            setEditingSourceId(null);
+            setFormData({ name: '', type: 'rss', url: '', category: 'tech' });
+          } else {
+            setShowAddForm(true);
+          }
+        }}>
           {showAddForm ? 'Cancel' : '+ Add Source'}
         </button>
       </div>
@@ -141,10 +168,10 @@ export default function SourceManager({ onClose, onSourcesChanged }: SourceManag
       {showAddForm && (
         <form className="add-source-form" onSubmit={handleAddSource}>
           <div className="discovery-header">
-            <h4>{formData.type === 'video' ? '📺 Add Live Discovery' : 'Manual Entry'}</h4>
+            <h4>{editingSourceId ? `✏️ Editing: ${formData.name}` : (formData.type === 'video' ? '📺 Add Live Discovery' : 'Manual Entry')}</h4>
             {formData.type === 'video' && (
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="btn-discover"
                 onClick={async () => {
                   setError('');
@@ -173,8 +200,8 @@ export default function SourceManager({ onClose, onSourcesChanged }: SourceManag
                     <div className="discovery-name">{res.channel}</div>
                     <div className="discovery-title">{res.title}</div>
                   </div>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="btn-add-quick"
                     onClick={() => {
                       setFormData({
@@ -250,7 +277,7 @@ export default function SourceManager({ onClose, onSourcesChanged }: SourceManag
           </div>
 
           <button type="submit" className="btn-submit">
-            Add Source
+            {editingSourceId ? 'Update Source' : 'Add Source'}
           </button>
         </form>
       )}
@@ -272,7 +299,16 @@ export default function SourceManager({ onClose, onSourcesChanged }: SourceManag
                   />
                 </div>
                 <div className="source-details">
-                  <div className="source-name">{source.name}</div>
+                  <div className="source-name">
+                    {source.name}
+                    <button
+                      className="btn-edit-inline"
+                      onClick={() => startEditing(source)}
+                      title="Edit source"
+                    >
+                      ✏️
+                    </button>
+                  </div>
                   <div className="source-meta">
                     <span className="badge">{source.type}</span>
                     <span className="badge category">{source.category}</span>

@@ -52,7 +52,9 @@ export default function InteractiveMap({
   // Hover state
   const [hoveredArticleId, setHoveredArticleId] = useState<string | null>(null);
   const [hoveredMarkerPos, setHoveredMarkerPos] = useState<{ x: number; y: number } | null>(null);
+  const [hoveredCluster, setHoveredCluster] = useState<NewsItem[]>([]);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastHoverCheckRef = useRef<{ x: number, y: number, id: string | null }>({ x: 0, y: 0, id: null, });
 
   // Calibration State
   const [isCalibrating, setIsCalibrating] = useState(false);
@@ -121,7 +123,7 @@ export default function InteractiveMap({
   // Default fallback constants for AI-WORLD-MAP.png if no calibration exists
   const DEFAULT_ORIGIN_X = 0.5; // (Prime Meridian)
   const DEFAULT_ORIGIN_Y = 0.64; // (Equator)
-  const DEFAULT_PX_PER_LON = 1.0 / 360; 
+  const DEFAULT_PX_PER_LON = 1.0 / 360;
   const DEFAULT_PX_PER_LAT_N = 1.0 / 120; // Northern stretch
   const DEFAULT_PX_PER_LAT_S = 1.0 / 100; // Southern stretch
 
@@ -143,7 +145,7 @@ export default function InteractiveMap({
     if (calibratedData) {
       // Use user-calibrated points (normalized to image space 0-1)
       normX = calibratedData.originX + (lng * calibratedData.pxPerLon);
-      
+
       if (lat >= 0) {
         // Northern hemisphere
         normY = calibratedData.originY - (lat * calibratedData.pxPerLatNorth);
@@ -156,7 +158,7 @@ export default function InteractiveMap({
       // Values derived from current image audit:
       const originX = 0.5; // PM is centered
       const originY = 0.64; // Equator is low on this specific crop
-      const pxPerLon = 0.00276; 
+      const pxPerLon = 0.00276;
       const pxPerLatN = 0.00644;
       const pxPerLatS = 0.00428;
 
@@ -337,8 +339,8 @@ export default function InteractiveMap({
   const handleWheel = useCallback((e: React.WheelEvent<HTMLCanvasElement>) => {
     e.preventDefault();
 
-    const zoomSpeed = 0.15;
-    const direction = e.deltaY > 0 ? -1 : 1;
+    const zoomSpeed = 0.1;
+    const direction = e.deltaY > 0 ? 0.9 : 1.1;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -351,19 +353,19 @@ export default function InteractiveMap({
     const centerY = canvas.height / 2;
 
     setZoom((prev) => {
-      const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev + direction * zoomSpeed));
-      
+      const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev * direction));
+
       // Keep the point under the mouse cursor stable during zoom
       // formula: newPan = mx - centerX - ((mx - centerX - oldPan) / oldZoom) * newZoom
       const relX = (mx - centerX - panRef.current.x) / prev;
       const relY = (my - centerY - panRef.current.y) / prev;
-      
+
       const newPanX = mx - centerX - relX * newZoom;
       const newPanY = my - centerY - relY * newZoom;
-      
+
       setPanX(newPanX);
       setPanY(newPanY);
-      
+
       panRef.current = { x: newPanX, y: newPanY };
       zoomRef.current = newZoom;
       return newZoom;
@@ -385,7 +387,7 @@ export default function InteractiveMap({
     if (isDraggingRef.current) {
       setHoveredArticleId(null);
       setHoveredMarkerPos(null);
-      
+
       const deltaX = e.clientX - dragStartRef.current.x;
       const deltaY = e.clientY - dragStartRef.current.y;
       dragStartRef.current = { x: e.clientX, y: e.clientY };
@@ -393,27 +395,31 @@ export default function InteractiveMap({
       // Scale delta by canvas/CSS ratio so drag feels 1:1
       const rect = canvas.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
-      
+
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
 
-      setPanX((prev) => {
-        const next = prev + deltaX * scaleX;
-        panRef.current.x = isFinite(next) ? next : panRef.current.x;
-        return isFinite(next) ? next : prev;
-      });
-      setPanY((prev) => {
-        const next = prev + deltaY * scaleY;
-        panRef.current.y = isFinite(next) ? next : panRef.current.y;
-        return isFinite(next) ? next : prev;
-      });
+      const newPanX = panRef.current.x + deltaX * scaleX;
+      const newPanY = panRef.current.y + deltaY * scaleY;
+
+      if (isFinite(newPanX) && isFinite(newPanY)) {
+        panRef.current = { x: newPanX, y: newPanY };
+        setPanX(newPanX);
+        setPanY(newPanY);
+      }
       return;
     }
 
     // Detect hover over markers (use canvas coordinates)
     const canvasPos = cssToCanvas(e.clientX, e.clientY);
-    const hoveredArticles: NewsItem[] = [];
-    const HOVER_RADIUS = 20; // Hit detection radius in canvas pixels
+
+    // Optimization: skip detection if mouse hasn't moved much and no hover exists
+    const distFromLast = Math.sqrt((canvasPos.x - lastHoverCheckRef.current.x) ** 2 + (canvasPos.y - lastHoverCheckRef.current.y) ** 2);
+    if (distFromLast < 3 && !hoveredArticleId) return;
+    lastHoverCheckRef.current = { x: canvasPos.x, y: canvasPos.y, id: hoveredArticleId };
+
+    const HOVER_RADIUS = 25; // Slightly larger for easier selection
+    let closestArticle: NewsItem | null = null;
     let closestPos: { x: number; y: number } | null = null;
     let minDistance = HOVER_RADIUS;
 
@@ -426,35 +432,51 @@ export default function InteractiveMap({
       const distance = Math.sqrt((canvasPos.x - pos.x) ** 2 + (canvasPos.y - pos.y) ** 2);
 
       if (distance < HOVER_RADIUS) {
-        hoveredArticles.push(article);
         if (distance < minDistance) {
           minDistance = distance;
+          closestArticle = article;
           closestPos = pos;
         }
       }
     });
 
     // Update hover state
-    if (hoveredArticles.length > 0) {
+    if (closestArticle) {
+      const articleId = (closestArticle as NewsItem).id;
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
         hoverTimeoutRef.current = null;
       }
-      setHoveredArticleId(hoveredArticles[0].id);
-      if (closestPos) {
-        setHoveredMarkerPos({ x: closestPos.x, y: closestPos.y });
+
+      if (hoveredArticleId !== articleId) {
+        setHoveredArticleId(articleId);
+        if (closestPos) {
+          setHoveredMarkerPos({ x: closestPos.x, y: closestPos.y });
+
+          // Calculate cluster here, once per hover change
+          const cluster = articles.filter(a => {
+            if (!a.location) return false;
+            const p = projectToCanvas(a.location.lat, a.location.lng);
+            if (!p) return false;
+            return Math.sqrt((closestPos!.x - p.x) ** 2 + (closestPos!.y - p.y) ** 2) < 20;
+          });
+          // Remove duplicates
+          const uniqueCluster = cluster.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+          setHoveredCluster(uniqueCluster);
+        }
       }
     } else {
       if (!hoverTimeoutRef.current && hoveredArticleId) {
         hoverTimeoutRef.current = setTimeout(() => {
           setHoveredArticleId(null);
           setHoveredMarkerPos(null);
+          setHoveredCluster([]);
           hoverTimeoutRef.current = null;
-        }, 300);
+        }, 150); // Faster fade out
       }
     }
 
-    canvas.style.cursor = hoveredArticles.length > 0 ? 'pointer' : isDraggingRef.current ? 'grabbing' : 'grab';
+    canvas.style.cursor = closestArticle ? 'pointer' : isDraggingRef.current ? 'grabbing' : 'grab';
   }, [articles, cssToCanvas, canvasToCss, projectToCanvas, hoveredArticleId]);
 
   // Handle canvas mouse up (stop dragging)
@@ -466,15 +488,15 @@ export default function InteractiveMap({
   const handleCanvasClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     if (isCalibrating) {
       const canvasPos = cssToCanvas(e.clientX, e.clientY);
-      
+
       // Calculate position relative to the UNZOOMED image
       const ir = imgDrawRectRef.current;
       const centerX = canvasRef.current!.width / 2;
       const centerY = canvasRef.current!.height / 2;
-      
+
       const imgX = (canvasPos.x - panRef.current.x - centerX) / zoomRef.current + centerX;
       const imgY = (canvasPos.y - panRef.current.y - centerY) / zoomRef.current + centerY;
-      
+
       const normX = (imgX - ir.x) / ir.w;
       const normY = (imgY - ir.y) / ir.h;
 
@@ -494,13 +516,13 @@ export default function InteractiveMap({
 
         const originX = p1.normX;
         const originY = p1.normY;
-        
+
         // London is 51.5N. pxPerLatNorth = (originY - p2.normY) / 51.5
         const pxPerLatNorth = (originY - p2.normY) / 51.5;
-        
+
         // Sydney is -33.8. pxPerLatSouth = (p3.normY - originY) / 33.8
         const pxPerLatSouth = (p3.normY - originY) / 33.8;
-        
+
         // Sydney is 151.2E. pxPerLon = (p3.normX - originX) / 151.2
         const pxPerLon = (p3.normX - originX) / 151.2;
 
@@ -575,10 +597,10 @@ export default function InteractiveMap({
       const dpr = window.devicePixelRatio || 1;
       const rect = container.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
-      
+
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
-      
+
       // Call the latest drawMap so we don't use a stale closure with empty articles
       drawMapRef.current();
     };
@@ -619,29 +641,7 @@ export default function InteractiveMap({
       />
 
       {/* Hovered Article Tooltip */}
-      {hoveredMarkerPos && hoveredArticleId && (() => {
-        // Find all articles near the hovered position to show a cluster
-        const mainArticle = articles.find(a => a.id === hoveredArticleId);
-        if (!mainArticle || !mainArticle.location) return null;
-
-        const hoveredPos = projectToCanvas(
-          mainArticle.location.lat,
-          mainArticle.location.lng
-        );
-        
-        let clusterArticles = [mainArticle];
-        if (hoveredPos) {
-          clusterArticles = articles.filter(a => {
-            if (!a.location) return false;
-            const p = projectToCanvas(a.location.lat, a.location.lng);
-            if (!p) return false;
-            return Math.sqrt((hoveredPos.x - p.x)**2 + (hoveredPos.y - p.y)**2) < 20;
-          });
-        }
-        
-        // Remove duplicates by ID
-        clusterArticles = clusterArticles.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-
+      {hoveredMarkerPos && hoveredArticleId && hoveredCluster.length > 0 && (() => {
         // Scale canvas position to CSS position for the tooltip div
         const cssPos = canvasToCss(hoveredMarkerPos.x, hoveredMarkerPos.y);
 
@@ -657,6 +657,7 @@ export default function InteractiveMap({
             onMouseLeave={() => {
               setHoveredArticleId(null);
               setHoveredMarkerPos(null);
+              setHoveredCluster([]);
             }}
             style={{
               left: `${cssPos.x}px`,
@@ -665,12 +666,12 @@ export default function InteractiveMap({
             }}
           >
             <div className="tooltip-header">
-              📍 {clusterArticles[0].location?.name}
-              {clusterArticles.length > 1 && <span className="cluster-badge">{clusterArticles.length} Stories</span>}
+              📍 {hoveredCluster[0].location?.name}
+              {hoveredCluster.length > 1 && <span className="cluster-badge">{hoveredCluster.length} Stories</span>}
             </div>
-            
+
             <div className="tooltip-articles">
-              {clusterArticles.slice(0, 3).map(article => (
+              {hoveredCluster.slice(0, 3).map(article => (
                 <div key={article.id} className="tooltip-article-item">
                   <a href={article.url} target="_blank" rel="noopener noreferrer" className="tooltip-title">
                     {article.title}
@@ -678,11 +679,11 @@ export default function InteractiveMap({
                   <div className="tooltip-source">{article.source}</div>
                 </div>
               ))}
-              {clusterArticles.length > 3 && (
-                <div className="tooltip-more">+{clusterArticles.length - 3} more articles...</div>
+              {hoveredCluster.length > 3 && (
+                <div className="tooltip-more">+{hoveredCluster.length - 3} more articles...</div>
               )}
             </div>
-            
+
             <div className="tooltip-hint">Click a title to read more</div>
           </div>
         );
@@ -754,8 +755,8 @@ export default function InteractiveMap({
             <div className="calibration-actions">
               <button className="cancel-btn" onClick={() => setIsCalibrating(false)}>Cancel</button>
               {calibratedData && (
-                <button 
-                  className="cancel-btn reset-btn" 
+                <button
+                  className="cancel-btn reset-btn"
                   onClick={() => {
                     localStorage.removeItem('map_calibration');
                     setCalibratedData(null);
