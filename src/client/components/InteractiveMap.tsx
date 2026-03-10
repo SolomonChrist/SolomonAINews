@@ -554,6 +554,12 @@ export default function InteractiveMap({
     };
   }, [zoom, panX, panY, articles, selectedArticle, hoveredArticleId, calibratedData, isCalibrating, tempPoints, drawMap]);
 
+  // Keep the latest drawMap function available for the resize observer without triggering re-binds
+  const drawMapRef = useRef(drawMap);
+  useEffect(() => {
+    drawMapRef.current = drawMap;
+  }, [drawMap]);
+
   // Set canvas size on mount and resize
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -563,9 +569,13 @@ export default function InteractiveMap({
     const updateSize = () => {
       const dpr = window.devicePixelRatio || 1;
       const rect = container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
-      drawMap();
+      
+      // Call the latest drawMap so we don't use a stale closure with empty articles
+      drawMapRef.current();
     };
 
     updateSize();
