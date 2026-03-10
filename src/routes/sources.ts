@@ -20,11 +20,37 @@ interface NewsSource {
   params?: Record<string, any>;
 }
 
+async function readSourcesConfig() {
+  try {
+    const data = await fs.readFile(SOURCES_FILE, 'utf-8');
+    if (!data || data.trim() === '') {
+      throw new Error('Empty file');
+    }
+    return JSON.parse(data);
+  } catch (error) {
+    console.warn('Sources file missing or invalid, initializing default...');
+    const defaultConfig = {
+      sources: [],
+      settings: {
+        refreshInterval: 300,
+        maxArticlesPerSource: 50,
+        mapZoom: 3,
+        centerLat: 20,
+        centerLng: 0,
+        modules: ["map", "feed", "videos", "stats"]
+      }
+    };
+    // Ensure directory exists
+    await fs.mkdir(path.dirname(SOURCES_FILE), { recursive: true });
+    await fs.writeFile(SOURCES_FILE, JSON.stringify(defaultConfig, null, 2));
+    return defaultConfig;
+  }
+}
+
 // Get all sources
 sourcesRouter.get('/', async (req: Request, res: Response) => {
   try {
-    const data = await fs.readFile(SOURCES_FILE, 'utf-8');
-    const config = JSON.parse(data);
+    const config = await readSourcesConfig();
     res.json(config.sources);
   } catch (error) {
     console.error('Error reading sources:', error);
@@ -42,9 +68,7 @@ sourcesRouter.post('/', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Missing required fields: name, type, url, category' });
     }
 
-    // Read current sources
-    const data = await fs.readFile(SOURCES_FILE, 'utf-8');
-    const config = JSON.parse(data);
+    const config = await readSourcesConfig();
 
     // Generate ID from name
     const id = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
@@ -84,9 +108,7 @@ sourcesRouter.put('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     const updates = req.body;
 
-    // Read current sources
-    const data = await fs.readFile(SOURCES_FILE, 'utf-8');
-    const config = JSON.parse(data);
+    const config = await readSourcesConfig();
 
     // Find and update source
     const sourceIndex = config.sources.findIndex((s: NewsSource) => s.id === id);
@@ -115,9 +137,7 @@ sourcesRouter.delete('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    // Read current sources
-    const data = await fs.readFile(SOURCES_FILE, 'utf-8');
-    const config = JSON.parse(data);
+    const config = await readSourcesConfig();
 
     // Find source
     const sourceIndex = config.sources.findIndex((s: NewsSource) => s.id === id);
@@ -143,9 +163,7 @@ sourcesRouter.patch('/:id/toggle', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    // Read current sources
-    const data = await fs.readFile(SOURCES_FILE, 'utf-8');
-    const config = JSON.parse(data);
+    const config = await readSourcesConfig();
 
     // Find and toggle source
     const sourceIndex = config.sources.findIndex((s: NewsSource) => s.id === id);

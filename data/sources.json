@@ -173,6 +173,436 @@
       "enabled": true,
       "pollInterval": 1800,
       "lastPolled": null
+    },
+    {
+      "id": "openai-news",
+      "name": "Openai",
+      "url": "https://openai.com/news/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "anthropic-news",
+      "name": "Anthropic",
+      "url": "https://www.anthropic.com/news/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "research",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "google-blog-ai",
+      "name": "Google AI Blog",
+      "url": "https://blog.google/technology/ai/rss/",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "deepmind-discover",
+      "name": "Deepmind Discover",
+      "url": "https://deepmind.google/discover/blog/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "research",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "google-developers-blog",
+      "name": "Google Developers",
+      "url": "https://developers.googleblog.com/en/rss/",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "meta-ai-blog",
+      "name": "Meta AI Blog",
+      "url": "https://ai.meta.com/blog/rss/",
+      "type": "rss",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "meta-engineering",
+      "name": "Meta Engineering",
+      "url": "https://engineering.fb.com/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "microsoft-ai-blog",
+      "name": "Microsoft AI Blog",
+      "url": "https://blogs.microsoft.com/blog/category/ai/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "microsoft-ai-news",
+      "name": "Microsoft AI News",
+      "url": "https://news.microsoft.com/source/topics/ai/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "nvidia-ai-news",
+      "name": "Nvidia AI",
+      "url": "https://www.nvidia.com/en-us/feed/rss/?tag=ai",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "aws-ml-blog",
+      "name": "AWS Machine Learning",
+      "url": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "azure-ai-blog",
+      "name": "Azure AI",
+      "url": "https://azure.microsoft.com/en-us/blog/topics/ai-machine-learning/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "stability-ai-news",
+      "name": "Stability AI",
+      "url": "https://stability.ai/news/rss",
+      "type": "rss",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "midjourney-updates",
+      "name": "Midjourney Updates",
+      "url": "https://www.midjourney.com/updates/rss",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "x-ai-blog",
+      "name": "X.ai Blog",
+      "url": "https://x.ai/blog/rss",
+      "type": "rss",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "perplexity-blog",
+      "name": "Perplexity Blog",
+      "url": "https://www.perplexity.ai/hub/blog/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "runpod-blog",
+      "name": "RunPod Blog",
+      "url": "https://blog.runpod.io/rss/",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "replicate-blog",
+      "name": "Replicate Blog",
+      "url": "https://replicate.com/blog/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "techcrunch-ai",
+      "name": "TechCrunch AI",
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "theverge-ai",
+      "name": "The Verge AI",
+      "url": "https://www.theverge.com/rss/ai/index.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "wired-ai-tag",
+      "name": "Wired AI (Latest)",
+      "url": "https://www.wired.com/feed/tag/ai/latest/rss",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "engadget-rss",
+      "name": "Engadget",
+      "url": "https://www.engadget.com/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "zdnet-ai",
+      "name": "ZDNet AI",
+      "url": "https://www.zdnet.com/topic/artificial-intelligence/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "cnet-news",
+      "name": "CNET News",
+      "url": "https://www.cnet.com/rss/news/",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "venturebeat-ai",
+      "name": "VentureBeat AI",
+      "url": "https://venturebeat.com/category/ai/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "technologyreview-ai",
+      "name": "MIT Technology Review AI",
+      "url": "https://www.technologyreview.com/topic/artificial-intelligence/feed",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "reuters-tech",
+      "name": "Reuters Tech",
+      "url": "https://www.reuters.com/technology/rss",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "bbc-tech",
+      "name": "BBC Technology",
+      "url": "https://feeds.bbci.co.uk/news/technology/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "theguardian-ai",
+      "name": "The Guardian AI",
+      "url": "https://www.theguardian.com/uk/technology/artificialintelligenceai/rss",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "nytimes-tech",
+      "name": "NYT Technology",
+      "url": "https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/section/technology/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "unite-ai",
+      "name": "Unite.ai",
+      "url": "https://www.unite.ai/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "marktechpost",
+      "name": "Marktechpost",
+      "url": "https://www.marktechpost.com/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "towardsdatascience",
+      "name": "Towards Data Science",
+      "url": "https://towardsdatascience.com/feed",
+      "type": "rss",
+      "enabled": true,
+      "category": "articles",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "analyticsvidhya",
+      "name": "Analytics Vidhya",
+      "url": "https://www.analyticsvidhya.com/blog/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "articles",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "the-decoder",
+      "name": "The Decoder",
+      "url": "https://the-decoder.com/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "importai",
+      "name": "Import AI",
+      "url": "https://www.importai.com/rss/",
+      "type": "rss",
+      "enabled": true,
+      "category": "research",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "latent-space",
+      "name": "Latent Space",
+      "url": "https://www.latent.space/feed",
+      "type": "rss",
+      "enabled": true,
+      "category": "research",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "deeplearning-batch",
+      "name": "DeepLearning.ai The Batch",
+      "url": "https://www.deeplearning.ai/the-batch/rss/",
+      "type": "rss",
+      "enabled": true,
+      "category": "articles",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "github-ai-changelog",
+      "name": "GitHub AI Changelog",
+      "url": "https://github.blog/changelog/label/ai/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "openai-research",
+      "name": "OpenAI Research",
+      "url": "https://openai.com/research/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "research",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "pytorch-blog",
+      "name": "PyTorch Blog",
+      "url": "https://pytorch.org/feed.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "tech",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "mistral-news",
+      "name": "Mistral News",
+      "url": "https://mistral.ai/news/rss.xml",
+      "type": "rss",
+      "enabled": true,
+      "category": "company",
+      "pollInterval": 1800,
+      "lastPolled": null
+    },
+    {
+      "id": "japantimes-tech",
+      "name": "Japan Times Tech",
+      "url": "https://www.japantimes.co.jp/feed/",
+      "type": "rss",
+      "enabled": true,
+      "category": "news",
+      "pollInterval": 1800,
+      "lastPolled": null
     }
   ],
   "settings": {
