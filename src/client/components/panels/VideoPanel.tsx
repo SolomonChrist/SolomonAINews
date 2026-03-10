@@ -88,6 +88,8 @@ export default function VideoPanel() {
                 youtubeId = video.url.split('v=')[1].split('&')[0];
               } else if (video.url.includes('youtu.be/')) {
                 youtubeId = video.url.split('youtu.be/')[1].split('?')[0];
+              } else if (video.url.includes('youtube.com/live/')) {
+                youtubeId = video.url.split('youtube.com/live/')[1].split('?')[0];
               }
               // Try to grab from fallbackVideoId if populated
               if ((video as any).fallbackVideoId) {
@@ -96,6 +98,7 @@ export default function VideoPanel() {
 
               const isNoEmbed = video.url.includes('noembed=1') || video.url.includes('business') || youtubeId === 'f39oHo6vFLg' || youtubeId === 'HSImh9Pz_44';
               const isPlaying = playingMap[video.id];
+              const targetUrl = youtubeId ? `https://www.youtube.com/watch?v=${youtubeId}` : video.url;
 
               return (
                 <div key={video.id} className="video-grid-item">
@@ -112,7 +115,7 @@ export default function VideoPanel() {
                         style={{ border: 'none', borderRadius: '8px', width: '100%', height: '100%' }}
                       ></iframe>
                       <a 
-                        href={`https://www.youtube.com/watch?v=${youtubeId}`} 
+                        href={targetUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         style={{
@@ -176,7 +179,7 @@ export default function VideoPanel() {
                         </div>
                       </div>
                       <a 
-                        href={`https://www.youtube.com/watch?v=${youtubeId}`} 
+                        href={targetUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
