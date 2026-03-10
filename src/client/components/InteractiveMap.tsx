@@ -616,12 +616,15 @@ export default function InteractiveMap({
       {/* Hovered Article Tooltip */}
       {hoveredMarkerPos && hoveredArticleId && (() => {
         // Find all articles near the hovered position to show a cluster
+        const mainArticle = articles.find(a => a.id === hoveredArticleId);
+        if (!mainArticle || !mainArticle.location) return null;
+
         const hoveredPos = projectToCanvas(
-          articles.find(a => a.id === hoveredArticleId)!.location!.lat,
-          articles.find(a => a.id === hoveredArticleId)!.location!.lng
+          mainArticle.location.lat,
+          mainArticle.location.lng
         );
         
-        let clusterArticles = [articles.find(a => a.id === hoveredArticleId)!];
+        let clusterArticles = [mainArticle];
         if (hoveredPos) {
           clusterArticles = articles.filter(a => {
             if (!a.location) return false;
