@@ -16,10 +16,15 @@ export default function VideoPanel() {
   const [videos, setVideos] = useState<LiveVideo[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [playingMap, setPlayingMap] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     fetchVideos();
   }, []);
+
+  const playVideo = (id: string) => {
+    setPlayingMap(prev => ({ ...prev, [id]: true }));
+  };
 
   const fetchVideos = async () => {
     setLoading(true);
@@ -89,13 +94,16 @@ export default function VideoPanel() {
                 youtubeId = (video as any).fallbackVideoId;
               }
 
+              const isNoEmbed = video.url.includes('noembed=1') || video.url.includes('business') || youtubeId === 'f39oHo6vFLg' || youtubeId === 'HSImh9Pz_44';
+              const isPlaying = playingMap[video.id];
+
               return (
                 <div key={video.id} className="video-grid-item">
-                  {youtubeId ? (
+                  {youtubeId && (!isNoEmbed || isPlaying) ? (
                     <iframe
                       width="100%"
                       height="100%"
-                      src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&modestbranding=1&playsinline=1&rel=0`}
+                      src={isNoEmbed ? `https://yewtu.be/embed/${youtubeId}?autoplay=1&mute=1&local=true` : `https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&modestbranding=1&playsinline=1&rel=0`}
                       title={video.title}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -105,8 +113,8 @@ export default function VideoPanel() {
                   ) : (
                     <div
                       className="video-card fallback"
-                      onClick={() => openVideo(video.url)}
-                      style={{ height: '100%', flexDirection: 'column' }}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); playVideo(video.id); }}
+                      style={{ height: '100%', flexDirection: 'column', cursor: 'pointer' }}
                     >
                       <div style={{ position: 'relative', width: '100%', height: '120px' }}>
                         {video.thumbnail_url ? (
@@ -139,6 +147,13 @@ export default function VideoPanel() {
                         {video.status === 'live' && (
                           <div className="live-badge">🔴 LIVE</div>
                         )}
+                        <div className="play-overlay" style={{
+                          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                          backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: '50%', width: '48px', height: '48px',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'
+                        }}>
+                          ▶️
+                        </div>
                       </div>
                       <div style={{ flex: 1, padding: '12px 16px', display: 'flex', flexDirection: 'column' }}>
                         <h3 style={{ fontSize: '13px', fontWeight: '600', marginBottom: '8px' }}>{video.title}</h3>
